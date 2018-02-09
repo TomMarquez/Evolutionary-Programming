@@ -40,11 +40,19 @@ def fitness(sample, i, j, fit_score):
     if i >= len(sub_string):
         return 0
     elif j >= len(largest_string):
-        return fitness(sample, i + 1, 0, fit_score)
+        return fitness(sample, i+1, 0, fit_score)
     elif sub_string[i] == largest_string[j]:
-        return 1 + fitness(sample, i + 1, j + 1, fit_score + 1)
+        return 1 + fitness(sample, i+1, j+1, fit_score+1)
     else:
         return fitness(sample, i, j + 1, fit_score)
+
+def mating_pool():
+    total_fitness = 0
+    roulette_wheel = []
+    for i in range(0, population_size):
+        total_fitness =+ pop[i][k+1]
+    
+    return x
 
 def main():
     global k
