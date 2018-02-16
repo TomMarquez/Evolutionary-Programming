@@ -1,7 +1,6 @@
 ###################################################
 ## Name: Tom Marquez and Elisha Waugh
 ##
-## Email: tmarquez@alaska.edu, 
 ## Assignment: LCS Genetic Algorithm
 ##
 ##
@@ -10,48 +9,69 @@
 ###################################################
 from random import *
 
-#   Global Variables
-population_size = 10
-k =  0 # size of smallest string
-smallest_string = ""
-largest_string = ""
-pop = [] 
+### Changeable Global Variables #################################################################################
+population_size = 10            # Size of population                                                            #
+number_of_iterations = 100      # number of times the programe will run after last time a new max was found     #
+chance_of_breed = 95            # number between 0-100 that represents the percetage of chance of breading      #
+mutation_on = True              # If set to true it will allow for mutations to happen                          #
+#################################################################################################################
 
-#   The population(pop[]) is a list of samples(test objects); 
-#   each sample starts with an array (size k) of zeros and ones, 
-#   next it has a string that is created by takeing the smallest string and keeping the leters that correspond to a one in the array,
-#   last, it has it fitness value at the end of the list.
+### Other Global Variables ######################################################################################
+k =  0                          # Size of smallest string                                                       #
+smallest_string = ""            # Smallest string                                                               #
+largest_string = ""             #Largest string                                                                 #
+#################################################################################################################
 
-# initialize_pop
-# Creates a population of size population_size
-# where each member is k length (the length of the smallest string)
+### Population ##################################################################################################
+pop = []                                                                                                        #
+#   The population(pop[]) is a list of samples(test objects)                                                    #
+#   index: 0 to k-1             each sample starts with an array (size k) of zeros and ones,                    #
+#   index: k                    next, it has a string that is created by takeing the smallest string and        #
+#                                   keeping the leters that correspond to a one in the array,                   #
+#   index: k+1                  next, it has it fitness value at the end of the list.                           #
+#   index: k+2                  last, it has the longest valid substring (possible result)                      #
+#################################################################################################################
+
+# initializes the population 
 def initialize_pop():
     for i in range(0, population_size):
         pop.append([])
         for j in range (0, k):
             pop[i].append(randint(0, 1))
-        pop[i].append("")
-        pop[i].append(0)
+        pop[i].append("")   #substring of 1s and 0s
+        pop[i].append(0)    #fitness
+        pop[i].append("")   #longest possible valid substiring 
 
+# gets the substring based on the ones and zeros from the smallest string
 def get_substrings():
     for i in range(0, population_size):
         for j in range(0, k):
             if pop[i][j] == 1:
                 pop[i][k] = pop[i][k] + smallest_string[j]
 
-def fitness(sample, i, j, fit_score):
-    sub_string = str(sample[k])
-    if i >= len(sub_string):
-        return 0
-    elif j >= len(largest_string):
-        return fitness(sample, i+1, 0, fit_score)
-    elif sub_string[i] == largest_string[j]:
-        return 1 + fitness(sample, i+1, j+1, fit_score+1)
-    else:
-        return fitness(sample, i, j + 1, fit_score)
+# fitness is calculated by looping throgh all objects in the population. The fitness score is the highest number of matching elements in the substring and the longest string
+def fitness():
+    global pop
+    for i in range(0, population_size):     #loop through all population
+        max_score = 0
+        result = ""
+        for j in range(0, len(pop[i][k])):  #go through all letters in substring
+            score = 0
+            str = ""
+            m = j
+            for l in range(0, len(largest_string)):           
+                if pop[i][k][m] == largest_string[l]:
+                    score += 1
+                    str = str + largest_string[l]
+                    if m < len(pop[i][k]) - 1:
+                        m += 1
+            if score > max_score:
+                max_score = score
+                result = str
+        pop[i][k+1] = max_score
+        pop[i][k+2] = result
 
-# mating_pool
-# 
+# Thia function selects the mating pool at random based on fitness score. It uses a roulette wheel which is sized to the total fitness of all population.
 def mating_pool(new_pop_size):
     total_fitness = []
     roulette_wheel = []
@@ -64,18 +84,13 @@ def mating_pool(new_pop_size):
     for i in range(0, new_pop_size):
         result.append(roulette_wheel[randint(0, len(roulette_wheel)-1)])
     return result
-
-# breed
-# Takes in the mating pool and finds a pair
-# to breed. Each member has a 95% chance of 
-# breeding. Once a pair is found, 1-point crossover
-# is performed. If there is one member left in the 
-# mate_match array, it is appended to the result. 
+    
+# This function breads the given mating pool
 def breed(mating_pool):
     mate_match = []
     result = []
     for i in range(0, len(mating_pool)):
-        if randint(0, 100) >= 6:
+        if randint(0, 100) >= 100 - chance_of_breed:
            mate_match.append(mating_pool[i])
         else:
             result.append(mating_pool[i])
@@ -88,8 +103,7 @@ def breed(mating_pool):
         result.append(mate_match[0])
     return result
 
-# cross_over
-# 1-point crossover is preformed on a pair
+# This is a helper function for breed. it uses a random cross over point to mate two objects.
 def cross_over(mate_match):
     cross_point = randint(0, k-1)
     temp = 0
@@ -99,13 +113,9 @@ def cross_over(mate_match):
         mate_match[1][i] = temp
     x = mate_match[0]
     y = mate_match[1]
-    return x, y;
+    return (x, y)
 
-# mutation
-# Mutation is preformed on the population.
-# Each member has a 1/population size chance
-# of being mutated, and each gene of the selected 
-# member has a 1/k chance of mutating.
+# If turned on in randomly selects bits to be fliped. An 1/population size chance of being selected. If selected each bit has 1/k chance of being fliped
 def mutation():
     global pop
     for i in range(0, len(pop)):
@@ -116,9 +126,8 @@ def mutation():
                         pop[i][j] = 1
                     else:
                         pop[i][j] = 0
-                    
 
-
+################################ Main ########### Main ########## Main ##########################################
 def main():
     max_fit = []
     gen = 0
@@ -137,13 +146,12 @@ def main():
         largest_string = string_two
     initialize_pop()
     get_substrings()
-    for i in range(0, population_size):
-        pop[i][k+1] = fitness(pop[i], 0, 0, 0)
-    max_fit = pop[i]
+    fitness()
+    max_fit = pop[0]
 
-    while max_fit_last_beat < 10:
-        for i in range(0, population_size):
-            pop[i][k+1] = fitness(pop[i], 0, 0, 0)
+    # Main loop of program. it runs untill it has not found a higher fitness in a set number of iterations.
+    while max_fit_last_beat < number_of_iterations:
+        fitness()
         print("population :\n" + str(pop))
         print("\n") 
         print("gen: " + str(gen) + " max_fit_last_beat : " + str(max_fit_last_beat) + "\n")
@@ -152,6 +160,8 @@ def main():
                 max_fit = pop[i]
         new_pop = mating_pool(population_size)
         pop = breed(new_pop)
+        if mutation_on:
+            mutation()
         gen += 1
 
         max_fit_last_beat +=1
