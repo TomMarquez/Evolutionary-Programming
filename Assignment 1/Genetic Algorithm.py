@@ -1,6 +1,7 @@
 ###################################################
 ## Name: Tom Marquez and Elisha Waugh
 ##
+## Email: tmarquez@alaska.edu, 
 ## Assignment: LCS Genetic Algorithm
 ##
 ##
@@ -21,6 +22,9 @@ pop = []
 #   next it has a string that is created by takeing the smallest string and keeping the leters that correspond to a one in the array,
 #   last, it has it fitness value at the end of the list.
 
+# initialize_pop
+# Creates a population of size population_size
+# where each member is k length (the length of the smallest string)
 def initialize_pop():
     for i in range(0, population_size):
         pop.append([])
@@ -46,6 +50,8 @@ def fitness(sample, i, j, fit_score):
     else:
         return fitness(sample, i, j + 1, fit_score)
 
+# mating_pool
+# 
 def mating_pool(new_pop_size):
     total_fitness = []
     roulette_wheel = []
@@ -59,6 +65,12 @@ def mating_pool(new_pop_size):
         result.append(roulette_wheel[randint(0, len(roulette_wheel)-1)])
     return result
 
+# breed
+# Takes in the mating pool and finds a pair
+# to breed. Each member has a 95% chance of 
+# breeding. Once a pair is found, 1-point crossover
+# is performed. If there is one member left in the 
+# mate_match array, it is appended to the result. 
 def breed(mating_pool):
     mate_match = []
     result = []
@@ -76,6 +88,8 @@ def breed(mating_pool):
         result.append(mate_match[0])
     return result
 
+# cross_over
+# 1-point crossover is preformed on a pair
 def cross_over(mate_match):
     cross_point = randint(0, k-1)
     temp = 0
@@ -87,6 +101,11 @@ def cross_over(mate_match):
     y = mate_match[1]
     return x, y;
 
+# mutation
+# Mutation is preformed on the population.
+# Each member has a 1/population size chance
+# of being mutated, and each gene of the selected 
+# member has a 1/k chance of mutating.
 def mutation():
     global pop
     for i in range(0, len(pop)):
