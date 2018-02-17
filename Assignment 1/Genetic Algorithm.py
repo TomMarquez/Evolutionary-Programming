@@ -10,8 +10,8 @@
 from random import *
 
 ### Changeable Global Variables #################################################################################
-population_size = 4            # Size of population                                                            #
-number_of_iterations = 100      # number of times the programe will run after last time a new max was found     #
+population_size = 15            # Size of population                                                            #
+number_of_iterations = 10      # number of times the programe will run after last time a new max was found     #
 chance_of_breed = 95            # number between 0-100 that represents the percetage of chance of breading      #
 mutation_on = True              # If set to true it will allow for mutations to happen                          #
 #################################################################################################################
@@ -147,10 +147,21 @@ def main():
     max_fit_last_beat = 0 # variable for which generation the highest value was found
     max_fit_value = 0 # variable for the highest fit value
     global k, pop, smallest_string, largest_string
+    # for interactivity 
     ##string_one = input("enter string one \n")
     ##string_two = input("enter string two \n")
-    string_one = test_string_three_A
-    string_two = test_string_three_B
+    
+    #string_one = test_string_one_A
+    #string_two = test_string_one_B
+    #string_one = test_string_two_A
+    #string_two = test_string_two_B
+    #string_one = test_string_three_A
+    #string_two = test_string_three_B
+    #string_one = test_string_four_A
+    #string_two = test_string_four_B
+    string_one = test_string_five_A
+    string_two = test_string_five_B
+
     #Determin which string is smaller and make k the length of the smaller string
     if len(string_one) > len(string_two):
         k = len(string_two)
