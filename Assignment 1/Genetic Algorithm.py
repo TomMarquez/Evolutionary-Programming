@@ -10,7 +10,7 @@
 from random import *
 
 ### Changeable Global Variables #################################################################################
-population_size = 10            # Size of population                                                            #
+population_size = 4            # Size of population                                                            #
 number_of_iterations = 100      # number of times the programe will run after last time a new max was found     #
 chance_of_breed = 95            # number between 0-100 that represents the percetage of chance of breading      #
 mutation_on = True              # If set to true it will allow for mutations to happen                          #
@@ -30,6 +30,19 @@ pop = []                                                                        
 #                                   keeping the leters that correspond to a one in the array,                   #
 #   index: k+1                  next, it has it fitness value at the end of the list.                           #
 #   index: k+2                  last, it has the longest valid substring (possible result)                      #
+#################################################################################################################
+
+### Test Strings ################################################################################################
+test_string_one_A = "president"                                                                         
+test_string_one_B = "providence"                                                                         
+test_string_two_A = "fjglkjdfslgkjdfkgjthisaslkjflkasdjflka"                                                                         
+test_string_two_B = "fjgthis" 
+test_string_three_A = "ajlfkjadslkfjadslkjfadslkjftjoirgalksdnjdnrgorhoagnfdjgnerougdogodfgoirhgoiravodfngondfagndafgndfgndfngdfngfdngfdsng;ldfsngldfsng;ldfng;lndfslkgdflkgjdkjflkdjglkdfjg"
+test_string_three_B = "lkajglksjtesnrknerjeoisjtoisejlesnnesjfanshfsdhgsngjkrngjnsjafnsdjkfnasjdng;snflkasdnjagdjlkdjglkjds"
+test_string_four_A = "wordandthisstuffdogcathumanboardwallcomputer"
+test_string_four_B = "thisstuffwall"
+test_string_five_A = "adsfjiaoewjrioewnoirnewnruiewbriuewhiruhewuafbkjbgrbgiubrsdiugndiufhgiouergondsfjgnkjfbgjrbagjbnjgbdsiugbduhgoudfhgsoirndgoneroiugneruognerugbupaoihgoidfhngoidsnrognersoignerubgiueriuigbsrijgbdfijbgjdfbgjdfsgjdfpjsgnfdpojsgndopfisngerungiusperngiuprnsgundfuignfdiusghudsifhgiodfngiudfngsiusrndpiugsndfpiognfduiopsgnpiero"
+test_string_five_B = "fksdajfoiewjoarrnwejrneriuiurhgiudfgjeriuberiuafbeiubfweiubfiuaebfiueabfiuebfiueabfiuasbiupgdpognerognerspjgnpdisfngpiodfsngpoifdsngpoisdfngopidfsngopidfipog"
 #################################################################################################################
 
 # initializes the population 
@@ -130,11 +143,14 @@ def mutation():
 ################################ Main ########### Main ########## Main ##########################################
 def main():
     max_fit = []
-    gen = 0
-    max_fit_last_beat = 0
+    gen = 1
+    max_fit_last_beat = 0 # variable for which generation the highest value was found
+    max_fit_value = 0 # variable for the highest fit value
     global k, pop, smallest_string, largest_string
-    string_one = input("enter string one \n")
-    string_two = input("enter string two \n")
+    ##string_one = input("enter string one \n")
+    ##string_two = input("enter string two \n")
+    string_one = test_string_three_A
+    string_two = test_string_three_B
     #Determin which string is smaller and make k the length of the smaller string
     if len(string_one) > len(string_two):
         k = len(string_two)
@@ -148,24 +164,31 @@ def main():
     get_substrings()
     fitness()
     max_fit = pop[0]
-
+    max_fit_last_beat = 1
+    max_fit_value = pop[0][k+1]
     # Main loop of program. it runs untill it has not found a higher fitness in a set number of iterations.
-    while max_fit_last_beat < number_of_iterations:
+    while gen < number_of_iterations and max_fit_value < k:
         fitness()
-        print("population :\n" + str(pop))
-        print("\n") 
-        print("gen: " + str(gen) + " max_fit_last_beat : " + str(max_fit_last_beat) + "\n")
         for i in range(0, population_size):
             if max_fit[k+1] < pop[i][k+1]:
                 max_fit = pop[i]
+                max_fit_last_beat = gen #+= 1
+                max_fit_value = pop[i][k+1]
         new_pop = mating_pool(population_size)
         pop = breed(new_pop)
         if mutation_on:
             mutation()
         gen += 1
+        #print("population :\n" + str(pop))
+        print("\n") 
+        print("gen: " + str(gen) + " max_fit_last_beat : " + str(max_fit_last_beat) + "\n")
+        print("Current max string: " + str(max_fit))
 
-        max_fit_last_beat +=1
-    print("done : "  + str(max_fit))
+        #max_fit_last_beat +=1
+    print("\n")
+    print("done : the LCS is : "  + str(max_fit))
+    print("\n")
+    print("the generation is was found was : " + str(max_fit_last_beat) + " and the fit score is " + str(max_fit_value))
 
 
 if __name__ == "__main__":
