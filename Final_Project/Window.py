@@ -7,6 +7,11 @@ This will provide the window for displaying the simulation
 
 import tkinter as tk
 from tkinter import *
+import random
+import time
+
+from Car import Car
+from Road import Road
 
 # Class for creating the window
 class Window(Frame):
@@ -34,9 +39,21 @@ class Window(Frame):
 
         # create a ractangle (placeholder for car)
         # parameters for rectangle: (x0, y0, x1, y1, option, ...)
-        canvas.create_rectangle(400, 600, 430, 660, outline="gray", fill="gray", width=2)
+        #canvas.create_rectangle(400, 600, 430, 660, outline="gray", fill="gray", width=2)
 
-        canvas.pack(fill=BOTH, expand=1)
+        #canvas.pack(fill=BOTH, expand=1)
+
+        road = Road(canvas)
+
+        line1, line2 = road.line_coords()
+        print(line1)
+        print(line2)
+
+        car = Car(canvas)
+
+        for i in range(10):
+            car.car_update()
+            print(car.car_coords())
 
     def client_exit(self):
         exit()
