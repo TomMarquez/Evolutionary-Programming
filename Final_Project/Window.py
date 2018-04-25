@@ -15,6 +15,11 @@ from Road import Road
 from Obstacle import Obstacle
 
 OBSTACLE_SIZE = 10
+ROAD1_START = 300
+ROAD_DISTANCE = 100
+CAR_START = ROAD1_START + ROAD_DISTANCE - 50
+CAR_WIDTH = 10
+CAR_LENGTH = 20
 
 # Class for creating the window
 class Window(Frame):
@@ -46,16 +51,17 @@ class Window(Frame):
 
         #canvas.pack(fill=BOTH, expand=1)
 
-        road = Road(canvas)
+        road = Road(canvas, ROAD1_START, 0, ROAD_DISTANCE)
 
         road1_array, road2_array = road.line_coords()
 
-        car = Car(canvas)
+        car = Car(canvas, CAR_START, 0, CAR_WIDTH, CAR_LENGTH)
 
         obstacle1 = Obstacle(canvas, OBSTACLE_SIZE, 150, 150)
-        obstacle1.get_x_y_coords(road1_array, road2_array)
+        obs_pos = obstacle1.obstacle_coords()
+        #obstacle1.get_x_y_coords(road1_array, road2_array)
 
-        car.car_update()
+        car.car_update(road1_array, road2_array, obs_pos)
         #for i in range(1):
             #car.car_update()
             #print(car.car_coords())
@@ -67,7 +73,7 @@ def main():
 
     # root window
     root = Tk()
-    root.geometry("500x500")
+    root.geometry("800x800")
     # create instance
     app = Window(root)
 

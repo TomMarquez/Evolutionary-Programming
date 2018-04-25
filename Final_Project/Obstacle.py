@@ -13,9 +13,12 @@ class Obstacle(object):
         self.x = x
         self.y = y
         self.canvas = canvas
-        self.car = canvas.create_rectangle(self.x, self.y, self.x+size, self.y+size, width=size)
+        self.obstacle = canvas.create_rectangle(self.x, self.y, self.x+size, self.y+size, width=size)
 
     def get_x_y_coords(self,road1_array, road2_array):
             rand_elem = random.randrange(len(road1_array))
             print(rand_elem)
-    
+
+    def obstacle_coords(self):
+        """Return 2 arrays of lines to determine if car runs into either side of the road"""
+        return self.canvas.coords(self.obstacle)

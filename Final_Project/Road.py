@@ -6,11 +6,14 @@ from tkinter import *
 import random as rd
 import math
 
+Y_END = 700
+
 class Road(object):
-    def __init__(self, canvas, x0=350, y0=0):
+    def __init__(self, canvas, x0, y0, dist_between_roads):
         self.canvas = canvas
         self.x0 = x0
         self.y0 = y0
+        self.dist_between_road = dist_between_roads
         self.line1 = []
         self.line2 = []
 
@@ -31,7 +34,7 @@ class Road(object):
 
         # Variable for line two
         line2_var = 100
-        while self.y0 < 800:
+        while self.y0 < Y_END:
             x1 = self.x0
             y1 = self.y0
             x2 = x1
