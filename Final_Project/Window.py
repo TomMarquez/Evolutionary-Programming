@@ -12,6 +12,9 @@ import time
 
 from Car import Car
 from Road import Road
+from Obstacle import Obstacle
+
+OBSTACLE_SIZE = 10
 
 # Class for creating the window
 class Window(Frame):
@@ -45,15 +48,17 @@ class Window(Frame):
 
         road = Road(canvas)
 
-        line1, line2 = road.line_coords()
-        print(line1)
-        print(line2)
+        road1_array, road2_array = road.line_coords()
 
         car = Car(canvas)
 
-        for i in range(10):
-            car.car_update()
-            print(car.car_coords())
+        obstacle1 = Obstacle(canvas, OBSTACLE_SIZE, 150, 150)
+        obstacle1.get_x_y_coords(road1_array, road2_array)
+
+        car.car_update()
+        #for i in range(1):
+            #car.car_update()
+            #print(car.car_coords())
 
     def client_exit(self):
         exit()
@@ -62,7 +67,7 @@ def main():
 
     # root window
     root = Tk()
-    root.geometry("800x800")
+    root.geometry("500x500")
     # create instance
     app = Window(root)
 
