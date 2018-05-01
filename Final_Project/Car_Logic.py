@@ -1,3 +1,5 @@
+import random
+
 class Car_Logic:
 
 
@@ -24,20 +26,16 @@ class Car_Logic:
 	def get_move(self, road, car, obstacle):
 		return self.table[road][car][obstacle]
 
-	def crash(self, road, car, obstacle):
+	def crash(self, road, car, obstacle, road_move):
 		move = self.table[road][car][obstacle]
-		if car == obstacle and move == 0:
+		if car + road_move + move  == obstacle and obstacle != -1:
+			print("crash1 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
-		if car == 0 and move == -1:
+		if car + road_move + move < 0:
+			print("crash2 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
-		if car == 9 and move == 1:
+		if car + road_move + move > 9:
+			print("crash3 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
-		if car == -1 and move != 1:
-			return True
-		if car == 10 and move != -1:
-			return True
-		if car - obstacle == -1 and move == 1:
-			return True
-		if car - obstacle == 1 and move == -1:
-			return True
+		print(str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 		return False

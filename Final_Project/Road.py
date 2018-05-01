@@ -20,9 +20,9 @@ class Road(object):
         self.line1 = []
         self.line2 = []
         # Variable to find 2 other random numbers
-        self.rand_diff = 6
+        self.rand_diff = 10
         # Var for adding the y value after each iteration
-        self.add_y = 5
+        self.add_y = 10
         self.y_size = Y_SIZE
 
         self.create_line()

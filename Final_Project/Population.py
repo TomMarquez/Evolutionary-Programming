@@ -1,4 +1,5 @@
 from Car_Logic import Car_Logic
+import random
 
 class Population:
 
@@ -17,20 +18,28 @@ class Population:
 			self.pop[i].init_table()
 			self.crashed.append(False)
 			self.fit.append([i, 1])
-			self.car.append(5)
+			self.car.append(i)
 
+	def get_car(self, index):
+		return self.pop[index]
 	# might not need
 	def get_fitness(self, index):
 		return self.fit[i][1]
 
 	def make_move(self, road, obstacle, road_move):
 		for i in range(self.pop_size):
-			car_move = self.pop[i].get_move(road, self.car[i], obstacle)
-			if self.pop[i].crash(road, self.car[i], obstacle):
-				self.crashed[i] = True
-			else:
-				self.fit[i][1] += 1
-				self.car[i] += road_move + car_move
+			if not self.crashed[i]:
+				car_move = self.pop[i].get_move(road, self.car[i], obstacle)
+				if self.pop[i].crash(road, self.car[i], obstacle, road_move):
+					self.crashed[i] = True
+					print("crashed: " + str(i))
+
+				else:
+					self.fit[i][1] += 1
+					self.car[i] += road_move + car_move
+
+	def get_move(self,index, road, car, obstacle):
+		self.pop[index].get_move(road, car, obstacle)
 
 	def done(self):
 		for i in range(self.pop_size):

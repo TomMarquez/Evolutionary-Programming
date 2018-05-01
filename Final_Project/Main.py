@@ -1,4 +1,10 @@
 from Population import Population
+from Window import Window
+import tkinter as tk
+from tkinter import *
+import random
+import time
+import random
 
 class Main:
 	pop = Population(20, 70, 10)
@@ -23,3 +29,14 @@ class Main:
 	pop.print_fit()
 	pop.breed(20, 95)
 	pop
+
+
+
+	# root window
+	root = Tk()
+	root.geometry("800x800")
+	# create instance
+	app = Window(root)
+
+	# main loop
+	root.mainloop()
