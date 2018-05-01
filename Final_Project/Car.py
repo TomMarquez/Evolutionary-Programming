@@ -24,18 +24,16 @@ class Car(object):
         self.canvas = canvas
         self.car = canvas.create_rectangle(self.x0, self.y0, self.x1, self.y1, outline=OUTLINE, fill=FILL, width=WIDTH)
 
-        canvas.pack(fill=BOTH, expand=1)
+        canvas.pack(fill=BOTH, expand=1)    
 
-    def car_update(self, road1_arr, road2_arr, obs_pos):
+    def car_update(self, road1_arr, road2_arr, obs_pos, ROAD_DISTANCE):
         """Updates the car position
         Checks to make sure it has not hit the side of the road
         or hit an object
         DNA"""
 
         moves = []
-        # TODO: need to change the amount a moves it takes
         moves_size = len(road1_arr)
-        print("moves size" + str(moves_size))
         # Moves =
         for i in range(moves_size):
             moves.append(random.randrange(3))
@@ -45,35 +43,47 @@ class Car(object):
             print("out of Bounds!!")
 
         xmove = self.car_width
-        ymove = 20
+        ymove = 5
 
         # This for loops moves the car down the road
         # TODO: Does not check to see if car hits sides of road
-        for i in range(len(moves)):
-            self.y0 = self.y0+ymove
-            #if random number is 0, go left
-            if moves[i] == 0 and self.x0 != 0:
-                self.x0 = self.x0-xmove
-                self.canvas.move(self.car, -xmove, ymove)
-            # if random number is 0, go right
-            elif moves[i] == 1:
-                self.x0 = self.x0 + xmove
-                self.canvas.move(self.car, xmove, ymove)
-            # if random number is 0, go straight
-            else:
-                self.canvas.move(self.car, 0, ymove)
-            self.canvas.update()
-            time.sleep(0.25)
-            self.car_off_road(road1_arr)
+        #for i in range(len(moves)):
+        # if car made it to the end of the road, sto
+
+        #while not self.crash(road1_arr, ROAD_DISTANCE):
+        if self.y0 >= 700:
+            return False
+        self.y0 = self.y0+ymove
+        #if random number is 0, go left
+        if moves[i] == 0 and self.x0 != 0:
+            self.x0 = self.x0-xmove
+            self.canvas.move(self.car, -xmove, ymove)
+        # if random number is 0, go right
+        elif moves[i] == 1:
+            self.x0 = self.x0 + xmove
+            self.canvas.move(self.car, xmove, ymove)
+        # if random number is 0, go straight
+        else:
+            self.canvas.move(self.car, 0, ymove)
+        self.canvas.update()
+        time.sleep(0.10)
+        #self.car_off_road(road1_arr)
+        return True
 
     def car_coords(self):
         """Returns the cars coordinates to test if it has it the wall of the road"""
         return self.canvas.coords(self.car)
 
-    def crash(self, road):
+    def crash(self, road, ROAD_DISTANCE):
         """TODO: This method does nothing so far"""
-        #if car_coords() == 0
-        return True
+        for i in range(len(road)):
+            print("x0: " + str(self.x0) + " road[i]: " + str(int(road[i])))
+            print("car width: " + str(self.x0+self.car_width) + " other road: " + str(int(road[i]+ROAD_DISTANCE)))
+            if (self.x0 <= int(road[i]) and self.y0 == int(road[i]+1)) or (self.x0+self.car_width >= int(road[i]+ROAD_DISTANCE) and self.y0 == int(road[i]+1)):
+                print("crash")
+                return True
+            i = i+1
+        return False
 
     def car_off_road(self, road1_arr):
         """This method should determine when the car either hits the side of the road
@@ -83,5 +93,5 @@ class Car(object):
         car_pos = self.car_coords()
         car_pos_y = int(car_pos[1])
         road_pos = int(road1_arr[int(car_pos_y / self.car_length)])
-        print("car position " + str(car_pos_y))
-        print("road_pos " + str(road_pos))
+        #print("car position " + str(car_pos_y))
+        #print("road_pos " + str(road_pos))
