@@ -65,7 +65,7 @@ class Car(object):
             self.canvas.move(self.car, -xmove, ymove)
             self.canvas.move(self.text, -xmove, ymove)
         self.canvas.update()
-        #time.sleep(0.000002)
+        time.sleep(0.0002)
         #self.car_off_road(road1_arr)
         #return True
 

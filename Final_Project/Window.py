@@ -45,10 +45,10 @@ class Window(Frame):
         canvas = Canvas(self)
 
         # create a button
-        quitButton = Button(self, text="Quit", command=self.client_exit)
+        #quitButton = Button(self, text="Quit", command=self.client_exit)
 
         # place button on the window
-        quitButton.place(x=0, y=0)
+        #quitButton.place(x=0, y=0)
 
         # create a ractangle (placeholder for car)
         # parameters for rectangle: (x0, y0, x1, y1, option, ...)
@@ -57,7 +57,7 @@ class Window(Frame):
         #canvas.pack(fill=BOTH, expand=1)
         # d = [ [None for y in range(2) ] for x in range(2)]
         iterations = 10000
-        iteration = 0
+        iteration = 1
         max_fit = 0
         top_fit = 0
         for its in range(iterations):
@@ -71,11 +71,8 @@ class Window(Frame):
             max_fit_lbl = Label(self, text="Max Fitness: "  + str(max_fit), font=("Helvitica", 16), fg="red")
             max_fit_lbl.place(x=0, y=60)
 
-            top_fit_lbl = Label(self, text="Top Fitness: "  + str(top_fit), font=("Helvitica", 16), fg="red")
-            top_fit_lbl.place(x=0, y=90)
-
-
-            
+            #top_fit_lbl = Label(self, text="Top Fitness: "  + str(top_fit), font=("Helvitica", 16), fg="red")
+            #top_fit_lbl.place(x=0, y=90)
 
             road = Road(canvas, ROAD1_START, 0, ROAD_DISTANCE, Y_SIZE)
             road1_array, road2_array = road.line_coords()
@@ -173,7 +170,7 @@ class Window(Frame):
             top_fit = pop.fit[0][1]
             if top_fit > max_fit:
                 max_fit = top_fit
-            pop.breed(10, 95)
+            pop.breed(10, 95, 1)
 
     def pop_make_move():
         while(not pop.done()):

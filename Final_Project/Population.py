@@ -18,13 +18,11 @@ class Population:
 			self.pop[i].init_table()
 			self.crashed.append(False)
 			self.fit.append([i, 1])
-			self.car.append(5)
+			self.car.append(i)
 
 	def get_car(self, index):
 		return self.pop[index]
 	# might not need
-	def get_fitness(self, index):
-		return self.fit[i][1]
 
 	def make_move(self, road, obstacle, road_move):
 		for i in range(self.pop_size):
@@ -113,7 +111,7 @@ class Population:
 			self.pop[i].set_table(tables[i])
 			self.crashed.append(False)
 			self.fit.append([i, 1])
-			self.car.append(5)
+			self.car.append(i)
 
 	def breed(self, new_pop_size, chance_of_breed, mode):
 		pool = self.mating_pool(new_pop_size, mode)
