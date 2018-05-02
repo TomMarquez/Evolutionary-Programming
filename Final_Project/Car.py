@@ -53,7 +53,7 @@ class Car(object):
             
             self.canvas.move(self.car, 0, ymove)
             self.canvas.move(self.text, 0, ymove)
-        # if random number is 0, go right
+        # if random number is 1, go right
         elif move == 1:
             self.x0 = self.x0 + xmove
             self.canvas.move(self.car, xmove, ymove)
@@ -65,7 +65,7 @@ class Car(object):
             self.canvas.move(self.car, -xmove, ymove)
             self.canvas.move(self.text, -xmove, ymove)
         self.canvas.update()
-        time.sleep(0.02)
+        #time.sleep(0.000002)
         #self.car_off_road(road1_arr)
         #return True
 

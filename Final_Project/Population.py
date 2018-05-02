@@ -18,7 +18,7 @@ class Population:
 			self.pop[i].init_table()
 			self.crashed.append(False)
 			self.fit.append([i, 1])
-			self.car.append(i)
+			self.car.append(5)
 
 	def get_car(self, index):
 		return self.pop[index]
@@ -32,7 +32,7 @@ class Population:
 				car_move = self.pop[i].get_move(road, self.car[i], obstacle)
 				if self.pop[i].crash(road, self.car[i], obstacle, road_move):
 					self.crashed[i] = True
-					print("crashed: " + str(i))
+					# print("crashed: " + str(i))
 
 				else:
 					self.fit[i][1] += 1
@@ -55,14 +55,22 @@ class Population:
 		self.fit.sort(reverse=True, key=take_second)
 
 
-	def mating_pool(self, new_pop_size):
+	def mating_pool(self, new_pop_size, mode):
 		roulette_wheel = []
 		wheel_size = 0
 		result = []
-		for i in range(self.pop_size):
-			for j in range(self.pop_size - i):
-				roulette_wheel.append(self.fit[i][0])
-				wheel_size += 1
+		if mode == 1:
+			for i in range(self.pop_size):
+				for j in range(self.pop_size - i):
+					roulette_wheel.append(self.fit[i][0])
+					wheel_size += 1
+		elif mode == 2:
+			for i in range(self.pop_size):
+				wheel_size += self.fit[i][1]
+			for i in range(self.pop_size):
+				for j in range(self.fit[i][1]):
+					roulette_wheel.append(self.fit[i][0])
+
 		for i in range(new_pop_size):
 			index = random.randint(0, wheel_size-1)
 			result.append(roulette_wheel[index])
@@ -92,8 +100,6 @@ class Population:
 							if random.randint(0, self.road_size-1) == 0:
 								for l in range(self.road_size):
 									if random.randint(0, self.road_size-1) == 0:
-										print("mutation "+str(i)+" "+str(j)+" "+str(k)+" "+str(l) )
-										print(tables[i][j][k][l])
 										tables[i][j][k][l] = random.randint(0, 2) - 1
 		return tables
 
@@ -109,8 +115,8 @@ class Population:
 			self.fit.append([i, 1])
 			self.car.append(5)
 
-	def breed(self, new_pop_size, chance_of_breed):
-		pool = self.mating_pool(new_pop_size)
+	def breed(self, new_pop_size, chance_of_breed, mode):
+		pool = self.mating_pool(new_pop_size, mode)
 		mate_match = []
 		result = []
 		for i in range(0, len(pool)):

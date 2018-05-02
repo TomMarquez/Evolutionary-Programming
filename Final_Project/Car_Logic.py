@@ -29,13 +29,13 @@ class Car_Logic:
 	def crash(self, road, car, obstacle, road_move):
 		move = self.table[road][car][obstacle]
 		if car + road_move + move  == obstacle and obstacle != -1:
-			print("crash1 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
+			# print("crash1 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
 		if car + road_move + move < 0:
-			print("crash2 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
+			# print("crash2 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
 		if car + road_move + move > 9:
-			print("crash3 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
+			# print("crash3 " + str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 			return True
-		print(str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
+		# print(str(road) + " " + str(car) + " " + str(obstacle) + " " + str(move) + " " + str(road_move))
 		return False

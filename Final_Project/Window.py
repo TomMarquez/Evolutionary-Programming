@@ -56,58 +56,76 @@ class Window(Frame):
 
         #canvas.pack(fill=BOTH, expand=1)
         # d = [ [None for y in range(2) ] for x in range(2)]
-        self.grid = []
-        self.cars = []
-        self.obstacles = []
+        iterations = 10000
+        iteration = 0
+        max_fit = 0
+        top_fit = 0
+        for its in range(iterations):
+            self.grid = []
+            self.cars = []
+            self.obstacles = []
+            iteration_lbl = Label(self, text="Iteration: "  + str(iteration), font=("Helvitica", 16), fg="red")
+            iteration_lbl.place(x=0, y=30)
+            iteration +=1
 
-        road = Road(canvas, ROAD1_START, 0, ROAD_DISTANCE, Y_SIZE)
-        road1_array, road2_array = road.line_coords()
-        road1_array = road.get_x1_coords()
-        x = ROAD1_START
-        for i in range(10):
-            car = Car(canvas, x, 0, CAR_WIDTH, CAR_LENGTH, str(i))
-            self.cars.append(car)
-            x += 10
-        #obs_pos = obstacle1.obstacle_coords()
-        for i in range(len(road1_array)):
-            roadx = road1_array[i]
-            self.grid.append(roadx)
-        for i in range(70):
-            if random.randint(0, 10) == 0:
-                self.obstacles.append(random.randint(0, 9))
-            else:
-                self.obstacles.append(-1)
+            max_fit_lbl = Label(self, text="Max Fitness: "  + str(max_fit), font=("Helvitica", 16), fg="red")
+            max_fit_lbl.place(x=0, y=60)
 
-        for i in range(70):
-            if self.obstacles[i] != -1:
-                Obstacle(canvas, OBSTACLE_SIZE, i*10, self.grid[i]+self.obstacles[i]*10, road1_array, ROAD_DISTANCE)
-        #obstacle1.get_x_y_coords(road1_array, road2_array)
+            top_fit_lbl = Label(self, text="Top Fitness: "  + str(top_fit), font=("Helvitica", 16), fg="red")
+            top_fit_lbl.place(x=0, y=90)
 
-        # done = car.car_update(road1_array, road2_array, obs_pos, ROAD_DISTANCE)
 
-        y = 0
-        crashed = [False] * 10
-        while not pop.done():
-            j = 0
             
-            for j in range(len(self.cars)):
-                if not pop.crashed[j]:
-                    if j == 5:
-                        print("Car " + str(j) + " position: " + str(self.cars[j].x0))
-                        print("position: " + str(pop.car[j]))
-                        print("obs: " + str(self.obstacles[y]))
-                    move = pop.get_car(j).get_move(int(self.grid[y] / 10), pop.car[j], self.obstacles[y])
-                    self.cars[j].car_update(road1_array, road2_array, ROAD_DISTANCE, move)
-            if y == 0:
-                pop.make_move(int(self.grid[y]/10), self.obstacles[y], 0)
-                print(self.grid[y])
-            else:
-                pop.make_move(int(self.grid[y]/10), self.obstacles[y], int(( self.grid[y-1] - self.grid[y]) / 10))
-                print(self.grid[y])
+
+            road = Road(canvas, ROAD1_START, 0, ROAD_DISTANCE, Y_SIZE)
+            road1_array, road2_array = road.line_coords()
+            road1_array = road.get_x1_coords()
+            x = ROAD1_START
+            for i in range(10):
+                car = Car(canvas, x, 0, CAR_WIDTH, CAR_LENGTH, str(i))
+                self.cars.append(car)
+                x += 10
+            #obs_pos = obstacle1.obstacle_coords()
+            for i in range(len(road1_array)):
+                roadx = road1_array[i]
+                self.grid.append(roadx)
+            for i in range(70):
+                if random.randint(0, 10) == 0:
+                    self.obstacles.append(random.randint(0, 9))
+                else:
+                    self.obstacles.append(-1)
+
+            for i in range(70):
+                if self.obstacles[i] != -1:
+                    Obstacle(canvas, OBSTACLE_SIZE, i*10, self.grid[i]+self.obstacles[i]*10, road1_array, ROAD_DISTANCE)
+            #obstacle1.get_x_y_coords(road1_array, road2_array)
+
+            # done = car.car_update(road1_array, road2_array, obs_pos, ROAD_DISTANCE)
+
+            y = 0
+            crashed = [False] * 10
+            while not pop.done():
+                
+                
+                for j in range(len(self.cars)):
+                    if not pop.crashed[j]:
+                        if j == 5:
+                            print("Car " + str(j) + " position: " + str(self.cars[j].x0))
+                            print("position: " + str(pop.car[j]))
+                            print("obs: " + str(self.obstacles[y]))
+                        move = pop.get_car(j).get_move(int(self.grid[y] / 10), pop.car[j], self.obstacles[y])
+                        self.cars[j].car_update(road1_array, road2_array, ROAD_DISTANCE, move)
+                if y == 0:
+                    pop.make_move(int(self.grid[y]/10), self.obstacles[y], 0)
+                    #print(self.grid[y])
+                else:
+                    pop.make_move(int(self.grid[y]/10), self.obstacles[y], int(( self.grid[y-1] - self.grid[y]) / 10))
+                    #print(self.grid[y])
                 if y == 69 :
                     print("new road")
 
                     new_road_start = road1_array[len(road1_array)-1]
+                    print("last road pos: " + str(road1_array[len(road1_array)-1]))
                     new_x_coords = []
                     for i in range(len(self.cars)):
                         new_x_coords.append(self.cars[i].x0)
@@ -143,11 +161,19 @@ class Window(Frame):
                         if self.obstacles[i] != -1:
                             Obstacle(canvas, OBSTACLE_SIZE, i*10, self.grid[i]+self.obstacles[i]*10, road1_array, ROAD_DISTANCE)
                     #self.cars[j].car_update(road1_array, road2_array, ROAD_DISTANCE, move)
-                    print("new car array size: " + str(len(self.cars)))
-                    y = 2
-            
-            y += 1
-        print(pop.fit)
+                    y = 1
+                
+                y += 1
+            print(pop.fit)
+            canvas.delete("all")
+                #canvas.after(1000, canvas.delete, road)
+                #canvas.delete(road)
+            canvas.update()
+            pop.rank_fitness()
+            top_fit = pop.fit[0][1]
+            if top_fit > max_fit:
+                max_fit = top_fit
+            pop.breed(10, 95)
 
     def pop_make_move():
         while(not pop.done()):

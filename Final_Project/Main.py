@@ -6,37 +6,40 @@ import random
 import time
 import random
 
-class Main:
-	pop = Population(20, 70, 10)
+
+
+def main():
+	pop_size = 1000
+	iterations = 1000000
+	max_fit = 0
+	top_fit = 0
+	average_fit = 0
+	pop = Population(pop_size, 10, 10)
 	pop.init_pop()
-	road = 40
-	obstacle = 0
-	obstacles = []
-	for i in range(140):
-		if random.randint(0, 10) == 0:
-			obstacles.append(random.randint(0, 9))
-		else:
-			obstacles.append(-1)
-	print(obstacles)
-	while(not pop.done()):
-		is_obstacle = random.randint(0, 10) == 0
-		if is_obstacle:
-			obstacle = random.randint(0, 9)
-		road_move = random.randint(0,2) -1
-		pop.make_move(road + road_move, obstacle, -1)
-	pop.print_fit()
-	pop.rank_fitness()
-	pop.print_fit()
-	pop.breed(20, 95)
-	pop
+	road = 5
 
+	for i in range(iterations):
+		
+		obstacle = -1
+		while(not pop.done()):
+			if random.randint(0, 10) == 0:
+				obstacle = random.randint(0, 9)
+			road_move = random.randint(0,2) -1
+			pop.make_move(road, obstacle, road_move)
+			#road = road + road_move
+		pop.rank_fitness()
+		fit_sum = 0
+		top_fit = pop.fit[0][1]
+		if max_fit < top_fit:
+			max_fit = top_fit
+		for j in range(pop_size):
+			fit_sum += pop.fit[j][1]
+		average_fit = fit_sum / pop_size
+		pop.breed(pop_size, 95, 2)
+		print("Iteration: " + str(i))
+		print("Max Fitness: " + str(max_fit))
+		print("Top Fitness: " + str(top_fit))
+		print("Average Fitness: " + str(average_fit))
 
-
-	# root window
-	root = Tk()
-	root.geometry("800x800")
-	# create instance
-	app = Window(root)
-
-	# main loop
-	root.mainloop()
+if __name__=='__main__':
+    main()
